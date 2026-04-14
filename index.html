@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ mobileOpen: false }">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GBI My Home Rayon 20 — The Year To Arise and Shine</title>
+  <link rel="icon" type="image/png" href="images/logo-gbi.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            coal: '#0a0a0a',
+            paper: '#f2f2f0',
+            bone: '#dad7cb',
+            accent: '#d4a35a'
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'Helvetica Neue', 'Arial', 'sans-serif'],
+            body: ['DM Sans', 'Arial', 'sans-serif'],
+            mono: ['Space Mono', 'monospace'],
+            serifAlt: ['Georgia', 'Times New Roman', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', Arial, sans-serif; background: #0a0a0a; }
+    .overlay-black { background: linear-gradient(100deg, rgba(0,0,0,0.75) 20%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.8) 100%); }
+    .section-title-serif { font-family: Georgia, "Times New Roman", serif; }
+    .line-divider { height: 1px; background: rgba(10, 10, 10, 0.18); }
+    .schedule-noise {
+      position: relative;
+      overflow: hidden;
+      background-color: #f5f5f3;
+    }
+    .schedule-noise::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.23;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    .schedule-noise > * {
+      position: relative;
+      z-index: 1;
+    }
+    .schedule-noise::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px);
+      background-size: 34px 34px;
+    }
+  </style>
+</head>
+<body class="text-coal">
+  <header class="fixed top-0 left-0 w-full z-50 bg-black/85 backdrop-blur-sm border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#beranda" class="flex items-center gap-2 text-white">
+        <img src="images/logo-gbi.png" alt="Logo GBI" class="w-9 h-9 object-contain bg-white rounded-full p-1">
+        <span class="font-heading font-black text-lg">GBI</span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">Rayon 20</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-7 font-body text-[11px] uppercase tracking-[0.16em] text-white/85">
+        <a href="#beranda" class="hover:text-white">Home</a>
+
+        <div class="relative group">
+          <button class="hover:text-white flex items-center gap-2">
+            PROFILE
+            <i class="fa-solid fa-chevron-down text-[9px]"></i>
+          </button>
+          <div class="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+            <div class="w-60 bg-white text-black shadow-2xl border border-black/10 p-2 normal-case tracking-normal">
+              <a href="#profil" class="block px-3 py-2 text-sm hover:bg-black/5">About the Church</a>
+              <a href="#jadwal" class="block px-3 py-2 text-sm hover:bg-black/5">Service Times</a>
+              <a href="#kontak" class="block px-3 py-2 text-sm hover:bg-black/5">Contact & Location</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <button class="hover:text-white flex items-center gap-2">
+            MINISTRY
+            <i class="fa-solid fa-chevron-down text-[9px]"></i>
+          </button>
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+            <div class="w-[760px] max-w-[85vw] bg-white text-black shadow-2xl border border-black/10 p-7 normal-case tracking-normal">
+              <div class="grid grid-cols-3 gap-8">
+                <div>
+                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Worship</h4>
+                  <div class="space-y-2 text-sm">
+                    <a href="#jadwal" class="block hover:text-black/70">Main Service</a>
+                    <a href="#jadwal" class="block hover:text-black/70">Intercession Prayer</a>
+                    <a href="#jadwal" class="block hover:text-black/70">Sunday School</a>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Community</h4>
+                  <div class="space-y-2 text-sm">
+                    <a href="#pelayanan" class="block hover:text-black/70">Cell Fellowship</a>
+                    <a href="#pelayanan" class="block hover:text-black/70">Youth Ministry</a>
+                    <a href="#pelayanan" class="block hover:text-black/70">Family Ministry</a>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Mission</h4>
+                  <div class="space-y-2 text-sm">
+                    <a href="#event" class="block hover:text-black/70">Compassion Ministry</a>
+                    <a href="#event" class="block hover:text-black/70">City Evangelism</a>
+                    <a href="#kontak" class="block hover:text-black/70">Join Ministry</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#event" class="hover:text-white">Events</a>
+        <a href="#kontak" class="hover:text-white">Give</a>
+      </nav>
+
+      <button class="md:hidden text-white text-xl" @click="mobileOpen=!mobileOpen">
+        <i :class="mobileOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+      </button>
+    </div>
+    <div x-show="mobileOpen" x-transition class="md:hidden border-t border-white/10 px-6 py-4 bg-black/95">
+      <div class="flex flex-col gap-3 text-white/85 text-sm uppercase tracking-wider">
+        <a href="#beranda" @click="mobileOpen=false">Home</a>
+        <a href="#profil" @click="mobileOpen=false">PROFILE</a>
+        <a href="#pelayanan" @click="mobileOpen=false">MINISTRY</a>
+        <a href="#event" @click="mobileOpen=false">Events</a>
+        <a href="#kontak" @click="mobileOpen=false">Give</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="beranda" class="relative min-h-screen pt-16 flex items-center">
+      <img src="./images/image-8.png" alt="GBI My Home worship service" class="absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 overlay-black"></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10 w-full py-16 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="font-body text-white/85 text-base mb-5">Experience God’s presence at church this Sunday.</p>
+          <h1 class="font-heading font-medium text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-2xl">
+            ON EARTH AS IT IS
+            <br>
+            IN HEAVEN
+          </h1>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a href="#event" class="px-5 py-3 bg-white text-black text-sm font-semibold hover:bg-white/90 transition">Join Events <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            <a href="#jadwal" class="px-5 py-3 border border-white/40 text-white text-sm font-semibold hover:bg-white/10 transition">Service Times <i class="fa-solid fa-arrow-right ml-1"></i></a>
+          </div>
+        </div>
+        <div class="hidden lg:flex justify-end">
+          <img src="images/logo-gbi.png" alt="Logo Gereja Bethel Indonesia" class="w-56 h-56 object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)]">
+        </div>
+      </div>
+    </section>
+
+    <section class="schedule-noise py-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="font-heading text-3xl md:text-4xl text-black mb-10">Worship Schedule</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="border border-black/10 p-6">
+            <h3 class="font-heading text-xl uppercase mb-4">Main Service</h3>
+            <p class="text-black/80 leading-relaxed">MAIN SERVICE TPI 1 : 08.00 WIB</p>
+            <p class="text-black/80 leading-relaxed mt-1">MAIN SERVICE TPI 2 : 11.00 WIB</p>
+          </div>
+
+          <div class="border border-black/10 p-6">
+            <h3 class="font-heading text-xl uppercase mb-4">My Home Kids Service</h3>
+            <p class="text-black/80 leading-relaxed">MHK SERVICE 1 : 08.00 WIB</p>
+            <p class="text-black/80 leading-relaxed mt-1">MHK SERVICE 2 : 11.00 WIB</p>
+            <p class="text-black/70 leading-relaxed mt-3">Every Sunday at GBI My Home, 2nd Floor</p>
+          </div>
+
+          <div class="border border-black/10 p-6">
+            <h3 class="font-heading text-xl uppercase mb-4">Youth Service</h3>
+            <p class="text-black/80 leading-relaxed font-semibold">NEXTGEN MY HOME</p>
+            <p class="text-black/80 leading-relaxed mt-2">Every Saturday at 16.00 WIB</p>
+            <p class="text-black/70 leading-relaxed mt-1">at GBI My Home, 1st Floor</p>
+          </div>
+
+          <div class="border border-black/10 p-6">
+            <h3 class="font-heading text-xl uppercase mb-4">Young Adult Generation Ministry</h3>
+            <p class="text-black/70 leading-relaxed">(My Home Young Adults)</p>
+            <p class="text-black/80 leading-relaxed mt-2">Every Saturday at 19.00 WIB</p>
+            <p class="text-black/70 leading-relaxed mt-1">at GBI My Home, 2nd Floor</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="profil" class="bg-paper py-20">
+      <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="font-body text-4xl leading-tight max-w-2xl">GBI My Home Rayon 20 is a church community rooted in God's love and committed to impacting society.</h2>
+          <div class="mt-8 grid md:grid-cols-2 gap-6">
+            <div class="text-sm text-black/70 leading-relaxed">Every believer is created to belong and grow together. We serve through worship, prayer, cell fellowship, and social mission for the city.</div>
+            <div class="text-sm text-black/70 leading-relaxed">Our vision is to build a congregation that is strong in faith, mature in character, and active in serving the next generation.</div>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#pelayanan" class="px-4 py-2.5 bg-black text-white text-sm">Church Ministry <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            <a href="#event" class="px-4 py-2.5 border border-black/25 text-black text-sm">Event Calendar <i class="fa-solid fa-arrow-right ml-1"></i></a>
+          </div>
+        </div>
+        <div class="relative">
+          <img src="./images/image-7.png" alt="Congregation praying together" class="w-full h-[380px] object-cover shadow-2xl">
+          <div class="absolute -bottom-4 -left-4 bg-black text-white px-4 py-2 text-xs font-mono tracking-widest uppercase">The Year To Arise and Shine</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pelayanan" class="bg-coal py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="bg-white text-black p-8 md:p-10 shadow-2xl">
+          <h2 class="font-heading text-2xl md:text-3xl uppercase">Midweek Worship</h2>
+          <p class="mt-2 font-semibold uppercase">GBI My Home Rawasari - Rayon 20</p>
+
+          <div class="mt-8 grid md:grid-cols-3 gap-8 text-sm leading-relaxed">
+            <div>
+              <h3 class="font-heading text-lg uppercase mb-3">Breakthrough Prayer</h3>
+              <p>Every Tuesday</p>
+              <p class="mt-1">19.00 WIB (Onsite)</p>
+              <p class="mt-1">at GBI My Home Rawasari</p>
+              <p class="mt-1">2nd Floor</p>
+            </div>
+            <div>
+              <h3 class="font-heading text-lg uppercase mb-3">Online Fasting Prayer</h3>
+              <p>Every Friday</p>
+              <p class="mt-1">05.00 WIB</p>
+              <p class="mt-1">(Via Zoom Meeting)</p>
+            </div>
+            <div>
+              <h3 class="font-heading text-lg uppercase mb-3">Onsite Dawn Prayer</h3>
+              <p>Every Saturday</p>
+              <p class="mt-1">05.00 WIB</p>
+              <p class="mt-1">at GBI My Home Rawasari</p>
+              <p class="mt-1">2nd Floor</p>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <a href="https://www.youtube.com/c/GBIMYHOME" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-black text-white text-sm px-5 py-3 hover:bg-black/85 transition">
+              Our Youtube Channel <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="event" class="bg-[#ececec] py-20">
+      <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8 items-center">
+        <div class="bg-[#c8ccd0] p-8">
+          <h3 class="section-title-serif text-6xl leading-[0.9]">Holy<br>Week</h3>
+          <p class="mt-6 font-mono text-[11px] tracking-widest uppercase text-black/65">Tanjung Pinang · 2026</p>
+          <img src="./images/image-2.png" alt="Holy Week event" class="mt-6 w-full h-full object-cover">
+        </div>
+
+        <div>
+          <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Events</span>
+          <h3 class="font-body text-5xl mt-3">Holy Week</h3>
+          <p class="text-black/70 mt-4 max-w-md leading-relaxed">
+            Join us for Palm Sunday, Maundy Thursday, Good Friday, and Easter services with the GBI My Home Rayon 20 family.
+          </p>
+          <p class="mt-5 text-sm text-black/65">Mar 29, 2026 – Apr 5, 2026</p>
+          <a href="#kontak" class="inline-block mt-6 bg-black text-white text-sm px-4 py-2.5 hover:bg-black/90 transition">
+            View Event <i class="fa-solid fa-arrow-right ml-1"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="jadwal" class="bg-bone py-20">
+      <div class="max-w-3xl mx-auto px-6 text-center">
+        <h2 class="section-title-serif text-5xl">Encounter Jesus</h2>
+        <p class="mt-4 text-black/70 text-sm leading-relaxed max-w-xl mx-auto">
+          Do you know Jesus? We are ready to serve you through prayer, counseling, and pastoral care.
+        </p>
+
+        <div class="mt-10 text-left">
+          <div class="line-divider"></div>
+
+          <div x-data="{open:false}" class="py-4">
+            <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
+              <span>Meet Jesus</span>
+              <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
+            </button>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Foundational discipleship service to know Christ and grow in early faith.</p>
+            <div class="line-divider mt-4"></div>
+          </div>
+
+          <div x-data="{open:false}" class="py-4">
+            <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
+              <span>Receive Prophetic Prayer</span>
+              <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
+            </button>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Personal prayer support for struggles, family needs, and life decisions.</p>
+            <div class="line-divider mt-4"></div>
+          </div>
+
+          <div x-data="{open:false}" class="py-4">
+            <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
+              <span>Receive Prayer for Healing</span>
+              <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
+            </button>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Healing prayer ministry for physical, emotional, and inner restoration needs.</p>
+            <div class="line-divider mt-4"></div>
+          </div>
+
+          <div x-data="{open:false}" class="py-4">
+            <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
+              <span>Receive Inner Healing & Counseling</span>
+              <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
+            </button>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Pastoral support for inner healing and family counseling.</p>
+            <div class="line-divider mt-4"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative min-h-[540px]">
+      <img src="./images/image-9.png" alt="Church music community gathering" class="absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/45"></div>
+      <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 h-full flex flex-col justify-end">
+        <span class="font-mono text-[11px] tracking-widest uppercase text-white/75">Bethel Music Style Section</span>
+        <h3 class="mt-5 text-white font-body text-5xl max-w-2xl">New Album: We Must Respond</h3>
+        <a href="#kontak" class="inline-flex items-center gap-2 mt-7 text-white text-sm border-b border-white/70 w-fit pb-1">
+          Listen Now <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+    </section>
+
+    <section class="bg-black py-20">
+      <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <span class="font-mono text-[11px] tracking-widest uppercase text-white/60">Schools</span>
+          <h3 class="text-white font-body text-5xl mt-3 leading-tight">Resourcing Every Generation for Revival</h3>
+          <p class="text-white/65 mt-5 text-sm max-w-md">Equipping through Bible school, leadership training, and intergenerational ministry.</p>
+          <a href="#kontak" class="inline-block mt-7 bg-white text-black text-sm px-4 py-2.5 hover:bg-white/90 transition">View Schools <i class="fa-solid fa-arrow-right ml-1"></i></a>
+        </div>
+        <img src="./images/image-8.png" alt="Church ministry school" class="w-full h-[360px] object-cover">
+      </div>
+    </section>
+
+    <section class="bg-paper py-20">
+      <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Future Campus</span>
+          <h3 class="font-body text-5xl mt-3">arise & build</h3>
+          <p class="text-black/65 mt-5 text-sm max-w-md">We are preparing expanded ministry facilities to reach and equip more people.</p>
+          <a href="#kontak" class="inline-block mt-7 bg-black text-white text-sm px-4 py-2.5 hover:bg-black/90 transition">Learn More <i class="fa-solid fa-arrow-right ml-1"></i></a>
+        </div>
+        <img src="./images/image-10.png" alt="Future church campus plan" class="w-full h-[330px] object-cover">
+      </div>
+    </section>
+
+    <section id="kontak" class="bg-[#17191d] py-20 border-t border-white/10">
+      <div class="max-w-6xl mx-auto px-6">
+        <span class="font-mono text-[11px] tracking-widest uppercase text-white/50">Donation</span>
+        <h3 class="text-white text-5xl font-body mt-3">Give & Tithe Offering</h3>
+        <div class="mt-8 grid lg:grid-cols-2 gap-8">
+          <div class="bg-white/95 text-black p-6 md:p-7">
+            <h4 class="font-heading text-2xl">Donation Form</h4>
+            <p class="text-sm text-black/65 mt-1">Use this form to choose the donation account and payment method.</p>
+            <form class="mt-6 grid gap-3">
+              <input type="text" placeholder="Full Name" class="h-11 border border-black/15 px-3 text-sm outline-none">
+              <input type="number" placeholder="Amount (IDR)" class="h-11 border border-black/15 px-3 text-sm outline-none">
+              <select class="h-11 border border-black/15 px-3 text-sm outline-none bg-white">
+                <option>Offering</option>
+                <option>Tithe</option>
+                <option>Special Donation</option>
+              </select>
+              <select class="h-11 border border-black/15 px-3 text-sm outline-none bg-white">
+                <option>CIMB NIAGA - 8000 9403 9900</option>
+                <option>BCA - 380 146 7111</option>
+                <option>QRIS (Example)</option>
+              </select>
+              <button type="submit" class="h-11 bg-black text-white text-sm font-semibold hover:bg-black/80 transition">Submit Donation Info</button>
+            </form>
+          </div>
+
+          <div class="bg-white/95 text-black p-6 md:p-7">
+            <h4 class="font-heading text-2xl">Rekening Persembahan dan Persepuluhan</h4>
+            <a href="#" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold underline">Lihat Selengkapnya <i class="fa-solid fa-arrow-right text-xs"></i></a>
+
+            <div class="mt-5 space-y-4 text-sm leading-relaxed">
+              <p><span class="font-semibold">GBI MY HOME RAWASARI</span><br>NMID : ID1020034505997</p>
+              <p><span class="font-semibold">CIMB NIAGA : A/N GEREJA BETHEL INDONESIA JEMAAT RAWASARI</span><br>NO. REKENING : 8000 9403 9900</p>
+              <p><span class="font-semibold">BCA : A/N GBI RAWASARI</span><br>NO. REKENING : 380 146 7111</p>
+            </div>
+
+            <div class="mt-6 pt-5 border-t border-black/15">
+              <h5 class="font-heading text-lg">How to Pay via Bank Transfer</h5>
+              <ol class="mt-2 list-decimal pl-5 text-sm space-y-1 text-black/80">
+                <li>Select the destination account from the form.</li>
+                <li>Transfer according to your selected donation category.</li>
+                <li>Save transfer proof for confirmation.</li>
+              </ol>
+            </div>
+
+            <div class="mt-6 pt-5 border-t border-black/15">
+              <h5 class="font-heading text-lg">QRIS (Example)</h5>
+              <div class="mt-3 h-40 border-2 border-dashed border-black/30 flex flex-col items-center justify-center text-center px-4">
+                <i class="fa-solid fa-qrcode text-4xl text-black/60"></i>
+                <p class="text-xs text-black/65 mt-2">Scan this QRIS code example to complete your donation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-black text-white/70 border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-16 grid sm:grid-cols-2 lg:grid-cols-5 gap-10 text-sm">
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">About</h4>
+        <p class="leading-relaxed text-white/55">
+          Bethel-style ministry website for GBI My Home Rayon 20, focused on faith growth and community service.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Connect</h4>
+        <ul class="space-y-2 text-white/60">
+          <li><a href="#beranda" class="hover:text-white">Home</a></li>
+          <li><a href="#event" class="hover:text-white">Calendar</a></li>
+          <li><a href="#jadwal" class="hover:text-white">Schedule</a></li>
+          <li><a href="#kontak" class="hover:text-white">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Resources</h4>
+        <ul class="space-y-2 text-white/60">
+          <li><a href="#pelayanan" class="hover:text-white">Church Online</a></li>
+          <li><a href="#pelayanan" class="hover:text-white">Counseling</a></li>
+          <li><a href="#event" class="hover:text-white">Podcast</a></li>
+          <li><a href="#event" class="hover:text-white">Store</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">More</h4>
+        <ul class="space-y-2 text-white/60">
+          <li><a href="#profil" class="hover:text-white">Vision</a></li>
+          <li><a href="#pelayanan" class="hover:text-white">Privacy</a></li>
+          <li><a href="#kontak" class="hover:text-white">Terms</a></li>
+          <li><a href="#kontak" class="hover:text-white">Giving</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Social</h4>
+        <div class="space-y-2 text-white/60">
+          <a href="https://facebook.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-facebook-f w-5"></i> Facebook</a>
+          <a href="https://instagram.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-instagram w-5"></i> Instagram</a>
+          <a href="https://youtube.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-youtube w-5"></i> YouTube</a>
+          <a href="https://spotify.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-spotify w-5"></i> Spotify</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-5 text-center text-xs text-white/35">
+      © 2026 GBI My Home Rayon 20. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
