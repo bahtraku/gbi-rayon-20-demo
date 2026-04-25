@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Login</title>
+  <link rel="icon" type="image/png" href="images/logo-gbi.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0b0d11] min-h-screen text-white flex flex-col">
+  <main class="flex-1 flex items-center justify-center px-6 py-10">
+    <div class="w-full max-w-md bg-[#151922] border border-white/10 p-7 md:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <img src="images/logo-gbi.png" alt="Logo GBI" class="w-10 h-10 bg-white rounded-full p-1 object-contain">
+        <div>
+          <h1 class="text-xl font-semibold">Admin Panel</h1>
+          <p class="text-sm text-white/65">Masuk untuk mengelola konten website</p>
+        </div>
+      </div>
+
+      <form action="admin-dashboard.html" method="get" class="space-y-4">
+        <div>
+          <label class="block text-sm mb-2 text-white/80">Username Admin</label>
+          <input type="text" value="admin" placeholder="username" class="w-full h-11 px-3 bg-white/5 border border-white/15 text-sm outline-none">
+        </div>
+        <div>
+          <label class="block text-sm mb-2 text-white/80">Kata Sandi</label>
+          <input type="password" value="admin123" placeholder="••••••••" class="w-full h-11 px-3 bg-white/5 border border-white/15 text-sm outline-none">
+        </div>
+        <button type="submit" class="w-full h-11 bg-white text-black text-sm font-semibold hover:bg-white/90 transition">
+          Masuk Dashboard
+        </button>
+      </form>
+
+      <div class="mt-5 text-sm text-white/70">
+        ← <a href="index.html" class="hover:underline hover:text-white">Halaman Utama</a>
+      </div>
+    </div>
+  </main>
+  <footer class="border-t border-white/10 py-5">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
+      <p class="text-white/35">© 2026 GBI My Home Rayon 20. All rights reserved.</p>
+      <p class="text-white/50">
+        Powered by <a href="https://bahtraku.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">Bahtraku.org</a> |
+        <a href="admin-login.html" class="underline hover:text-white">Login Admin</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

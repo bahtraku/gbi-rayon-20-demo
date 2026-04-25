@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Database Gereja</title>
+  <link rel="icon" type="image/png" href="images/logo-gbi.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #filterProvince option,
+    #filterStatus option {
+      color: #111827;
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-[#0d1117] text-white min-h-screen flex flex-col">
+  <header class="sticky top-0 z-50 bg-[#111827] border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="admin-dashboard.html" class="flex items-center gap-3">
+        <img src="images/logo-gbi.png" alt="Logo GBI" class="w-9 h-9 object-contain bg-white rounded-full p-1">
+        <span class="font-semibold">Admin Panel</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm text-white/85">
+        <a href="admin-dashboard.html" class="hover:text-white">Dashboard</a>
+        <div class="relative group">
+          <button class="hover:text-white flex items-center gap-2">
+            Kelola Konten
+            <span class="text-[10px]">▾</span>
+          </button>
+          <div class="absolute top-full left-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+            <div class="w-52 bg-white text-black border border-black/10 shadow-xl p-2">
+              <a href="admin-database-gereja.html" class="block px-3 py-2 text-sm hover:bg-black/5">Database Gereja</a>
+              <a href="admin-crud-gereja.html" class="block px-3 py-2 text-sm hover:bg-black/5">Simulasi CRUD Gereja</a>
+              <a href="branches.html" class="block px-3 py-2 text-sm hover:bg-black/5">Preview Halaman Cabang</a>
+              <a href="index.html" class="block px-3 py-2 text-sm hover:bg-black/5">Preview Halaman Utama</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="relative group">
+        <button class="flex items-center gap-2 text-sm hover:text-white/90">
+          <span class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">JF</span>
+          <span class="hidden sm:inline">Admin Master</span>
+          <span class="text-[10px]">▾</span>
+        </button>
+        <div class="absolute right-0 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+          <div class="w-44 bg-white text-black border border-black/10 shadow-xl p-2">
+            <a href="#" class="block px-3 py-2 text-sm hover:bg-black/5">Pengaturan</a>
+            <a href="admin-login.html" class="block px-3 py-2 text-sm hover:bg-black/5">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl mx-auto px-6 py-8 w-full">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <h1 class="text-3xl font-semibold">Database Gereja</h1>
+        <p class="text-white/65 mt-2">Kelola data cabang gereja untuk peta dan halaman cabang.</p>
+      </div>
+      <a href="admin-crud-gereja.html" class="px-4 py-2 bg-white text-black text-sm font-medium hover:bg-white/90">Tambah Data Gereja</a>
+    </div>
+    <section class="mt-6 bg-[#151922] border border-white/10 p-5">
+      <h2 class="text-lg font-semibold">Pencarian & Filter Data</h2>
+      <div class="mt-4 grid lg:grid-cols-4 gap-3">
+        <div class="lg:col-span-2">
+          <label for="searchChurch" class="block text-xs text-white/65 mb-1">Cari Nama / Kota</label>
+          <input id="searchChurch" type="text" placeholder="Contoh: Rawasari, Bandung, Surabaya" class="w-full h-10 px-3 bg-white/5 border border-white/15 text-sm outline-none">
+        </div>
+        <div>
+          <label for="filterProvince" class="block text-xs text-white/65 mb-1">Filter Provinsi</label>
+          <select id="filterProvince" class="w-full h-10 px-3 bg-white/5 border border-white/15 text-sm outline-none">
+            <option value="Semua Provinsi">Semua Provinsi</option>
+            <option value="DKI Jakarta">DKI Jakarta</option>
+            <option value="Jawa Barat">Jawa Barat</option>
+            <option value="Jawa Tengah">Jawa Tengah</option>
+            <option value="Jawa Timur">Jawa Timur</option>
+            <option value="Sumatera Utara">Sumatera Utara</option>
+          </select>
+        </div>
+        <div>
+          <label for="filterStatus" class="block text-xs text-white/65 mb-1">Filter Status</label>
+          <select id="filterStatus" class="w-full h-10 px-3 bg-white/5 border border-white/15 text-sm outline-none">
+            <option value="Semua Status">Semua Status</option>
+            <option value="Aktif">Aktif</option>
+            <option value="Draft">Draft</option>
+            <option value="Nonaktif">Nonaktif</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div class="mt-6 overflow-x-auto border border-white/10">
+      <table class="w-full min-w-[840px] text-sm">
+        <thead class="bg-white/10 text-left">
+          <tr>
+            <th class="px-4 py-3">Nama Gereja</th>
+            <th class="px-4 py-3">Kota</th>
+            <th class="px-4 py-3">Provinsi</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3">Koordinat</th>
+            <th class="px-4 py-3">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="churchesTableBody">
+          <tr class="border-t border-white/10" data-name="Gereja GBI My Home Rawasari" data-city="Jakarta" data-province="DKI Jakarta" data-status="Aktif">
+            <td class="px-4 py-3">Gereja GBI My Home Rawasari</td>
+            <td class="px-4 py-3">Jakarta</td>
+            <td class="px-4 py-3">DKI Jakarta</td>
+            <td class="px-4 py-3"><span class="px-2 py-1 text-xs bg-emerald-500/15 text-emerald-300 border border-emerald-500/35">Aktif</span></td>
+            <td class="px-4 py-3">-6.1931, 106.8705</td>
+            <td class="px-4 py-3">
+              <a href="admin-crud-gereja.html" class="underline">Kelola</a>
+            </td>
+          </tr>
+          <tr class="border-t border-white/10" data-name="Gereja GBI Bandung Pusat" data-city="Bandung" data-province="Jawa Barat" data-status="Aktif">
+            <td class="px-4 py-3">Gereja GBI Bandung Pusat</td>
+            <td class="px-4 py-3">Bandung</td>
+            <td class="px-4 py-3">Jawa Barat</td>
+            <td class="px-4 py-3"><span class="px-2 py-1 text-xs bg-emerald-500/15 text-emerald-300 border border-emerald-500/35">Aktif</span></td>
+            <td class="px-4 py-3">-6.9175, 107.6191</td>
+            <td class="px-4 py-3">
+              <a href="admin-crud-gereja.html" class="underline">Kelola</a>
+            </td>
+          </tr>
+          <tr class="border-t border-white/10" data-name="Gereja GBI Surabaya Harapan" data-city="Surabaya" data-province="Jawa Timur" data-status="Draft">
+            <td class="px-4 py-3">Gereja GBI Surabaya Harapan</td>
+            <td class="px-4 py-3">Surabaya</td>
+            <td class="px-4 py-3">Jawa Timur</td>
+            <td class="px-4 py-3"><span class="px-2 py-1 text-xs bg-yellow-500/15 text-yellow-300 border border-yellow-500/35">Draft</span></td>
+            <td class="px-4 py-3">-7.2575, 112.7521</td>
+            <td class="px-4 py-3">
+              <a href="admin-crud-gereja.html" class="underline">Kelola</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-xs text-white/50">Tip: Untuk simulasi tambah/edit/hapus data, gunakan halaman <a href="admin-crud-gereja.html" class="underline">Simulasi CRUD Gereja</a>.</p>
+  </main>
+  <footer class="border-t border-white/10 py-5">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
+      <p class="text-white/35">© 2026 GBI My Home Rayon 20. All rights reserved.</p>
+      <p class="text-white/50">
+        Powered by <a href="https://bahtraku.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">Bahtraku.org</a> |
+        <a href="admin-login.html" class="underline hover:text-white">Login Admin</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function initDatabaseFilter() {
+      const searchInput = document.getElementById('searchChurch');
+      const provinceSelect = document.getElementById('filterProvince');
+      const statusSelect = document.getElementById('filterStatus');
+      const rows = document.querySelectorAll('#churchesTableBody tr');
+      if (!searchInput || !provinceSelect || !statusSelect || rows.length === 0) return;
+
+      const runFilter = () => {
+        const keyword = searchInput.value.trim().toLowerCase();
+        const selectedProvince = provinceSelect.value;
+        const selectedStatus = statusSelect.value;
+
+        rows.forEach((row) => {
+          const name = (row.dataset.name || '').toLowerCase();
+          const city = (row.dataset.city || '').toLowerCase();
+          const province = row.dataset.province || '';
+          const status = row.dataset.status || '';
+
+          const matchKeyword = keyword === '' || name.includes(keyword) || city.includes(keyword);
+          const matchProvince = selectedProvince === 'Semua Provinsi' || province === selectedProvince;
+          const matchStatus = selectedStatus === 'Semua Status' || status === selectedStatus;
+
+          if (matchKeyword && matchProvince && matchStatus) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
+      };
+
+      searchInput.addEventListener('input', runFilter);
+      provinceSelect.addEventListener('change', runFilter);
+      statusSelect.addEventListener('change', runFilter);
+      runFilter();
+    })();
+  </script>
+</body>
+</html>

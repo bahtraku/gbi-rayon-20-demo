@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - GBI Rayon 20</title>
+  <link rel="icon" type="image/png" href="images/logo-gbi.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1117] text-white min-h-screen flex flex-col">
+  <header class="sticky top-0 z-50 bg-[#111827] border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="admin-dashboard.html" class="flex items-center gap-3">
+        <img src="images/logo-gbi.png" alt="Logo GBI" class="w-9 h-9 object-contain bg-white rounded-full p-1">
+        <span class="font-semibold">Admin Panel</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm text-white/85">
+        <a href="admin-dashboard.html" class="hover:text-white">Dashboard</a>
+        <div class="relative group">
+          <button class="hover:text-white flex items-center gap-2">
+            Kelola Konten
+            <span class="text-[10px]">▾</span>
+          </button>
+          <div class="absolute top-full left-0 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+            <div class="w-52 bg-white text-black border border-black/10 shadow-xl p-2">
+              <a href="admin-database-gereja.html" class="block px-3 py-2 text-sm hover:bg-black/5">Database Gereja</a>
+              <a href="admin-crud-gereja.html" class="block px-3 py-2 text-sm hover:bg-black/5">Simulasi CRUD Gereja</a>
+              <a href="branches.html" class="block px-3 py-2 text-sm hover:bg-black/5">Preview Halaman Cabang</a>
+              <a href="index.html" class="block px-3 py-2 text-sm hover:bg-black/5">Preview Halaman Utama</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="relative group">
+        <button class="flex items-center gap-2 text-sm hover:text-white/90">
+          <span class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">JF</span>
+          <span class="hidden sm:inline">Admin Master</span>
+          <span class="text-[10px]">▾</span>
+        </button>
+        <div class="absolute right-0 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+          <div class="w-44 bg-white text-black border border-black/10 shadow-xl p-2">
+            <a href="#" class="block px-3 py-2 text-sm hover:bg-black/5">Pengaturan</a>
+            <a href="admin-login.html" class="block px-3 py-2 text-sm hover:bg-black/5">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl mx-auto px-6 py-8 w-full">
+    <h1 class="text-3xl font-semibold">Dashboard</h1>
+    <p class="text-white/65 mt-2">Ringkasan pengelolaan website GBI Rayon 20.</p>
+
+    <section class="grid md:grid-cols-3 gap-4 mt-8">
+      <div class="bg-[#151922] border border-white/10 p-5">
+        <p class="text-white/60 text-sm">Total Cabang</p>
+        <p class="text-3xl font-semibold mt-2">10</p>
+      </div>
+      <div class="bg-[#151922] border border-white/10 p-5">
+        <p class="text-white/60 text-sm">Konten Aktif</p>
+        <p class="text-3xl font-semibold mt-2">24</p>
+      </div>
+      <div class="bg-[#151922] border border-white/10 p-5">
+        <p class="text-white/60 text-sm">Pengguna Admin</p>
+        <p class="text-3xl font-semibold mt-2">1</p>
+      </div>
+    </section>
+
+    <section class="bg-[#151922] border border-white/10 p-6 mt-6">
+      <h2 class="text-xl font-semibold">Aksi Cepat</h2>
+      <div class="flex flex-wrap gap-3 mt-4">
+        <a href="admin-database-gereja.html" class="px-4 py-2 bg-white text-black text-sm font-medium hover:bg-white/90">Kelola Database Gereja</a>
+        <a href="admin-crud-gereja.html" class="px-4 py-2 bg-white/10 border border-white/20 text-sm hover:bg-white/15">Simulasi CRUD Data Gereja</a>
+        <a href="branches.html" class="px-4 py-2 border border-white/30 text-sm hover:bg-white/5">Lihat Halaman Cabang</a>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t border-white/10 py-5">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
+      <p class="text-white/35">© 2026 GBI My Home Rayon 20. All rights reserved.</p>
+      <p class="text-white/50">
+        Powered by <a href="https://bahtraku.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">Bahtraku.org</a> |
+        <a href="admin-login.html" class="underline hover:text-white">Login Admin</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

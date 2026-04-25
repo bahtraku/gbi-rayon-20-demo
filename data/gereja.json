@@ -1,0 +1,102 @@
+[
+  {
+    "id": "gbi-my-home-rawasari",
+    "name": "Gereja GBI My Home Rawasari",
+    "city": "Jakarta",
+    "latitude": -6.1931,
+    "longitude": 106.8705,
+    "address": "Jl. Rawasari, Jakarta Pusat",
+    "shortProfile": "Komunitas ibadah keluarga dengan pelayanan doa, pemuridan, dan misi kota.",
+    "image": "images/image-7.png"
+  },
+  {
+    "id": "gbi-kelapa-gading",
+    "name": "Gereja GBI Kelapa Gading",
+    "city": "Jakarta Utara",
+    "latitude": -6.1571,
+    "longitude": 106.904,
+    "address": "Kelapa Gading, Jakarta Utara",
+    "shortProfile": "Fokus pada pembinaan keluarga, youth service, dan pelayanan sosial.",
+    "image": "images/image-8.png"
+  },
+  {
+    "id": "gbi-bandung-pusat",
+    "name": "Gereja GBI Bandung Pusat",
+    "city": "Bandung",
+    "latitude": -6.9175,
+    "longitude": 107.6191,
+    "address": "Bandung Wetan, Kota Bandung",
+    "shortProfile": "Gereja kota dengan ibadah kreatif dan komunitas sel lintas generasi.",
+    "image": "images/image-9.png"
+  },
+  {
+    "id": "gbi-semarang-berkat",
+    "name": "Gereja GBI Semarang Berkat",
+    "city": "Semarang",
+    "latitude": -6.9667,
+    "longitude": 110.4167,
+    "address": "Semarang Tengah, Kota Semarang",
+    "shortProfile": "Melayani pemuridan, doa syafaat, dan pemberdayaan jemaat lokal.",
+    "image": "images/image-10.png"
+  },
+  {
+    "id": "gbi-surabaya-harapan",
+    "name": "Gereja GBI Surabaya Harapan",
+    "city": "Surabaya",
+    "latitude": -7.2575,
+    "longitude": 112.7521,
+    "address": "Wonokromo, Kota Surabaya",
+    "shortProfile": "Komunitas bertumbuh dalam pujian penyembahan dan pelayanan generasi muda.",
+    "image": "images/image-11.png"
+  },
+  {
+    "id": "gbi-yogyakarta-sejahtera",
+    "name": "Gereja GBI Yogyakarta Sejahtera",
+    "city": "Yogyakarta",
+    "latitude": -7.7956,
+    "longitude": 110.3695,
+    "address": "Kota Yogyakarta",
+    "shortProfile": "Mengembangkan sekolah Alkitab, kelompok sel, dan pelayanan kampus.",
+    "image": "images/image-7.png"
+  },
+  {
+    "id": "gbi-medan-gloria",
+    "name": "Gereja GBI Medan Gloria",
+    "city": "Medan",
+    "latitude": 3.5952,
+    "longitude": 98.6722,
+    "address": "Medan Kota, Sumatera Utara",
+    "shortProfile": "Pelayanan lintas usia dengan perhatian pada konseling dan doa kesembuhan.",
+    "image": "images/image-8.png"
+  },
+  {
+    "id": "gbi-makassar-anugerah",
+    "name": "Gereja GBI Makassar Anugerah",
+    "city": "Makassar",
+    "latitude": -5.1477,
+    "longitude": 119.4327,
+    "address": "Panakkukang, Kota Makassar",
+    "shortProfile": "Menggerakkan jemaat untuk misi lokal, ibadah raya, dan pelayanan anak.",
+    "image": "images/image-9.png"
+  },
+  {
+    "id": "gbi-denpasar-damai",
+    "name": "Gereja GBI Denpasar Damai",
+    "city": "Denpasar",
+    "latitude": -8.6705,
+    "longitude": 115.2126,
+    "address": "Denpasar Barat, Bali",
+    "shortProfile": "Menjadi rumah rohani bagi keluarga dan pekerja dengan ibadah bilingual.",
+    "image": "images/image-10.png"
+  },
+  {
+    "id": "gbi-balikpapan-shalom",
+    "name": "Gereja GBI Balikpapan Shalom",
+    "city": "Balikpapan",
+    "latitude": -1.2379,
+    "longitude": 116.8529,
+    "address": "Balikpapan Selatan, Kalimantan Timur",
+    "shortProfile": "Berfokus pada pemuridan marketplace dan pembinaan pemimpin sel.",
+    "image": "images/image-11.png"
+  }
+]

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ mobileOpen: false }">
+<html lang="id" x-data="{ mobileOpen: false }">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GBI My Home Rayon 20 — The Year To Arise and Shine</title>
+  <title>GBI My Home Rayon 20 — Tahun Untuk Bangkit dan Bersinar</title>
   <link rel="icon" type="image/png" href="images/logo-gbi.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script>
     tailwind.config = {
       theme: {
@@ -66,6 +67,60 @@
         linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px);
       background-size: 34px 34px;
     }
+    #branches-map {
+      width: 100%;
+      height: 520px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    #languageSwitcher option {
+      color: #000;
+    }
+    .goog-te-banner-frame.skiptranslate,
+    .goog-te-banner-frame,
+    iframe.goog-te-banner-frame {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+    }
+    body,
+    html {
+      top: 0 !important;
+      margin-top: 0 !important;
+    }
+    body > .skiptranslate,
+    .goog-te-spinner-pos,
+    #goog-gt-tt,
+    .goog-tooltip {
+      display: none !important;
+    }
+    .branches-mega-menu {
+      max-height: 64vh;
+      overflow: auto;
+    }
+    .leaflet-top,
+    .leaflet-bottom,
+    .leaflet-pane,
+    .leaflet-control {
+      z-index: 20 !important;
+    }
+    .leaflet-popup-content {
+      margin: 12px;
+      min-width: 220px;
+    }
+    .marker-label {
+      background: rgba(17, 25, 40, 0.9);
+      border: none;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      box-shadow: none;
+    }
+    .marker-label::before {
+      display: none;
+    }
   </style>
 </head>
 <body class="text-coal">
@@ -78,52 +133,52 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-7 font-body text-[11px] uppercase tracking-[0.16em] text-white/85">
-        <a href="#beranda" class="hover:text-white">Home</a>
+        <a href="#beranda" class="hover:text-white">Beranda</a>
 
         <div class="relative group">
           <button class="hover:text-white flex items-center gap-2">
-            PROFILE
+            PROFIL
             <i class="fa-solid fa-chevron-down text-[9px]"></i>
           </button>
           <div class="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
             <div class="w-60 bg-white text-black shadow-2xl border border-black/10 p-2 normal-case tracking-normal">
-              <a href="#profil" class="block px-3 py-2 text-sm hover:bg-black/5">About the Church</a>
-              <a href="#jadwal" class="block px-3 py-2 text-sm hover:bg-black/5">Service Times</a>
-              <a href="#kontak" class="block px-3 py-2 text-sm hover:bg-black/5">Contact & Location</a>
+              <a href="#profil" class="block px-3 py-2 text-sm hover:bg-black/5">Tentang Gereja</a>
+              <a href="#jadwal" class="block px-3 py-2 text-sm hover:bg-black/5">Jadwal Ibadah</a>
+              <a href="#kontak" class="block px-3 py-2 text-sm hover:bg-black/5">Kontak & Lokasi</a>
             </div>
           </div>
         </div>
 
         <div class="relative group">
           <button class="hover:text-white flex items-center gap-2">
-            MINISTRY
+            PELAYANAN
             <i class="fa-solid fa-chevron-down text-[9px]"></i>
           </button>
           <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
             <div class="w-[760px] max-w-[85vw] bg-white text-black shadow-2xl border border-black/10 p-7 normal-case tracking-normal">
               <div class="grid grid-cols-3 gap-8">
                 <div>
-                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Worship</h4>
+                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Ibadah</h4>
                   <div class="space-y-2 text-sm">
-                    <a href="#jadwal" class="block hover:text-black/70">Main Service</a>
-                    <a href="#jadwal" class="block hover:text-black/70">Intercession Prayer</a>
-                    <a href="#jadwal" class="block hover:text-black/70">Sunday School</a>
+                    <a href="#jadwal" class="block hover:text-black/70">Ibadah Utama</a>
+                    <a href="#jadwal" class="block hover:text-black/70">Doa Syafaat</a>
+                    <a href="#jadwal" class="block hover:text-black/70">Sekolah Minggu</a>
                   </div>
                 </div>
                 <div>
-                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Community</h4>
+                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Komunitas</h4>
                   <div class="space-y-2 text-sm">
-                    <a href="#pelayanan" class="block hover:text-black/70">Cell Fellowship</a>
-                    <a href="#pelayanan" class="block hover:text-black/70">Youth Ministry</a>
-                    <a href="#pelayanan" class="block hover:text-black/70">Family Ministry</a>
+                    <a href="#pelayanan" class="block hover:text-black/70">Persekutuan Sel</a>
+                    <a href="#pelayanan" class="block hover:text-black/70">Pelayanan Pemuda</a>
+                    <a href="#pelayanan" class="block hover:text-black/70">Pelayanan Keluarga</a>
                   </div>
                 </div>
                 <div>
-                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Mission</h4>
+                  <h4 class="font-semibold text-sm uppercase tracking-wider text-black/60 mb-3">Misi</h4>
                   <div class="space-y-2 text-sm">
-                    <a href="#event" class="block hover:text-black/70">Compassion Ministry</a>
-                    <a href="#event" class="block hover:text-black/70">City Evangelism</a>
-                    <a href="#kontak" class="block hover:text-black/70">Join Ministry</a>
+                    <a href="#event" class="block hover:text-black/70">Pelayanan Sosial</a>
+                    <a href="#event" class="block hover:text-black/70">Penginjilan Kota</a>
+                    <a href="#kontak" class="block hover:text-black/70">Gabung Pelayanan</a>
                   </div>
                 </div>
               </div>
@@ -131,8 +186,28 @@
           </div>
         </div>
 
-        <a href="#event" class="hover:text-white">Events</a>
-        <a href="#kontak" class="hover:text-white">Give</a>
+        <div class="relative group">
+          <a href="#branches" class="hover:text-white flex items-center gap-2 uppercase">
+            Cabang
+            <span class="text-[10px]">▾</span>
+          </a>
+          <div class="absolute top-full right-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+            <div class="branches-mega-menu w-[860px] max-w-[85vw] bg-white text-black shadow-2xl border border-black/10 p-6 normal-case tracking-normal">
+              <div id="branchesMegaMenuContentIndex" class="grid grid-cols-3 gap-6 text-sm">
+                <p class="text-black/60">Memuat data cabang...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="#event" class="hover:text-white">Acara</a>
+        <a href="#kontak" class="hover:text-white">Persembahan</a>
+        <div class="flex items-center">
+          <label for="languageSwitcher" class="sr-only">Terjemahkan</label>
+          <select id="languageSwitcher" class="h-8 bg-transparent border border-white/30 text-white text-[11px] px-2 uppercase tracking-[0.1em] outline-none">
+            <option value="id">ID</option>
+            <option value="en">EN</option>
+          </select>
+        </div>
       </nav>
 
       <button class="md:hidden text-white text-xl" @click="mobileOpen=!mobileOpen">
@@ -141,11 +216,12 @@
     </div>
     <div x-show="mobileOpen" x-transition class="md:hidden border-t border-white/10 px-6 py-4 bg-black/95">
       <div class="flex flex-col gap-3 text-white/85 text-sm uppercase tracking-wider">
-        <a href="#beranda" @click="mobileOpen=false">Home</a>
-        <a href="#profil" @click="mobileOpen=false">PROFILE</a>
-        <a href="#pelayanan" @click="mobileOpen=false">MINISTRY</a>
-        <a href="#event" @click="mobileOpen=false">Events</a>
-        <a href="#kontak" @click="mobileOpen=false">Give</a>
+        <a href="#beranda" @click="mobileOpen=false">Beranda</a>
+        <a href="#profil" @click="mobileOpen=false">PROFIL</a>
+        <a href="#pelayanan" @click="mobileOpen=false">PELAYANAN</a>
+        <a href="#branches" @click="mobileOpen=false">CABANG</a>
+        <a href="#event" @click="mobileOpen=false">Acara</a>
+        <a href="#kontak" @click="mobileOpen=false">Persembahan</a>
       </div>
     </div>
   </header>
@@ -156,15 +232,15 @@
       <div class="absolute inset-0 overlay-black"></div>
       <div class="max-w-7xl mx-auto px-6 relative z-10 w-full py-16 grid lg:grid-cols-2 gap-12 items-center">
         <div>
-          <p class="font-body text-white/85 text-base mb-5">Experience God’s presence at church this Sunday.</p>
+          <p class="font-body text-white/85 text-base mb-5">Rasakan hadirat Tuhan bersama kami pada ibadah Minggu ini.</p>
           <h1 class="font-heading font-medium text-white text-4xl sm:text-5xl lg:text-6xl leading-tight max-w-2xl">
-            ON EARTH AS IT IS
+            DI BUMI SEPERTI
             <br>
-            IN HEAVEN
+            DI SURGA
           </h1>
           <div class="mt-9 flex flex-wrap gap-3">
-            <a href="#event" class="px-5 py-3 bg-white text-black text-sm font-semibold hover:bg-white/90 transition">Join Events <i class="fa-solid fa-arrow-right ml-1"></i></a>
-            <a href="#jadwal" class="px-5 py-3 border border-white/40 text-white text-sm font-semibold hover:bg-white/10 transition">Service Times <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            <a href="#event" class="px-5 py-3 bg-white text-black text-sm font-semibold hover:bg-white/90 transition">Lihat Acara <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            <a href="#jadwal" class="px-5 py-3 border border-white/40 text-white text-sm font-semibold hover:bg-white/10 transition">Jadwal Ibadah <i class="fa-solid fa-arrow-right ml-1"></i></a>
           </div>
         </div>
         <div class="hidden lg:flex justify-end">
@@ -175,33 +251,33 @@
 
     <section class="schedule-noise py-16">
       <div class="max-w-6xl mx-auto px-6">
-        <h2 class="font-heading text-3xl md:text-4xl text-black mb-10">Worship Schedule</h2>
+        <h2 class="font-heading text-3xl md:text-4xl text-black mb-10">Jadwal Ibadah</h2>
         <div class="grid md:grid-cols-2 gap-6">
           <div class="border border-black/10 p-6">
-            <h3 class="font-heading text-xl uppercase mb-4">Main Service</h3>
-            <p class="text-black/80 leading-relaxed">MAIN SERVICE TPI 1 : 08.00 WIB</p>
-            <p class="text-black/80 leading-relaxed mt-1">MAIN SERVICE TPI 2 : 11.00 WIB</p>
+            <h3 class="font-heading text-xl uppercase mb-4">Ibadah Utama</h3>
+            <p class="text-black/80 leading-relaxed">IBADAH UTAMA TPI 1 : 08.00 WIB</p>
+            <p class="text-black/80 leading-relaxed mt-1">IBADAH UTAMA TPI 2 : 11.00 WIB</p>
           </div>
 
           <div class="border border-black/10 p-6">
-            <h3 class="font-heading text-xl uppercase mb-4">My Home Kids Service</h3>
-            <p class="text-black/80 leading-relaxed">MHK SERVICE 1 : 08.00 WIB</p>
-            <p class="text-black/80 leading-relaxed mt-1">MHK SERVICE 2 : 11.00 WIB</p>
-            <p class="text-black/70 leading-relaxed mt-3">Every Sunday at GBI My Home, 2nd Floor</p>
+            <h3 class="font-heading text-xl uppercase mb-4">Ibadah Anak My Home</h3>
+            <p class="text-black/80 leading-relaxed">IBADAH MHK 1 : 08.00 WIB</p>
+            <p class="text-black/80 leading-relaxed mt-1">IBADAH MHK 2 : 11.00 WIB</p>
+            <p class="text-black/70 leading-relaxed mt-3">Setiap Minggu di GBI My Home, Lantai 2</p>
           </div>
 
           <div class="border border-black/10 p-6">
-            <h3 class="font-heading text-xl uppercase mb-4">Youth Service</h3>
+            <h3 class="font-heading text-xl uppercase mb-4">Ibadah Pemuda</h3>
             <p class="text-black/80 leading-relaxed font-semibold">NEXTGEN MY HOME</p>
-            <p class="text-black/80 leading-relaxed mt-2">Every Saturday at 16.00 WIB</p>
-            <p class="text-black/70 leading-relaxed mt-1">at GBI My Home, 1st Floor</p>
+            <p class="text-black/80 leading-relaxed mt-2">Setiap Sabtu pukul 16.00 WIB</p>
+            <p class="text-black/70 leading-relaxed mt-1">di GBI My Home, Lantai 1</p>
           </div>
 
           <div class="border border-black/10 p-6">
-            <h3 class="font-heading text-xl uppercase mb-4">Young Adult Generation Ministry</h3>
-            <p class="text-black/70 leading-relaxed">(My Home Young Adults)</p>
-            <p class="text-black/80 leading-relaxed mt-2">Every Saturday at 19.00 WIB</p>
-            <p class="text-black/70 leading-relaxed mt-1">at GBI My Home, 2nd Floor</p>
+            <h3 class="font-heading text-xl uppercase mb-4">Ibadah Dewasa Muda</h3>
+            <p class="text-black/70 leading-relaxed">(Dewasa Muda My Home)</p>
+            <p class="text-black/80 leading-relaxed mt-2">Setiap Sabtu pukul 19.00 WIB</p>
+            <p class="text-black/70 leading-relaxed mt-1">di GBI My Home, Lantai 2</p>
           </div>
         </div>
       </div>
@@ -210,19 +286,19 @@
     <section id="profil" class="bg-paper py-20">
       <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
         <div>
-          <h2 class="font-body text-4xl leading-tight max-w-2xl">GBI My Home Rayon 20 is a church community rooted in God's love and committed to impacting society.</h2>
+          <h2 class="font-body text-4xl leading-tight max-w-2xl">GBI My Home Rayon 20 adalah komunitas gereja yang bertumbuh dalam kasih Tuhan dan berdampak bagi masyarakat.</h2>
           <div class="mt-8 grid md:grid-cols-2 gap-6">
-            <div class="text-sm text-black/70 leading-relaxed">Every believer is created to belong and grow together. We serve through worship, prayer, cell fellowship, and social mission for the city.</div>
-            <div class="text-sm text-black/70 leading-relaxed">Our vision is to build a congregation that is strong in faith, mature in character, and active in serving the next generation.</div>
+            <div class="text-sm text-black/70 leading-relaxed">Setiap jemaat dipanggil untuk bertumbuh bersama. Kami melayani melalui ibadah, doa, persekutuan sel, dan misi sosial bagi kota.</div>
+            <div class="text-sm text-black/70 leading-relaxed">Visi kami adalah membangun jemaat yang kuat dalam iman, dewasa dalam karakter, dan aktif melayani generasi berikutnya.</div>
           </div>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a href="#pelayanan" class="px-4 py-2.5 bg-black text-white text-sm">Church Ministry <i class="fa-solid fa-arrow-right ml-1"></i></a>
-            <a href="#event" class="px-4 py-2.5 border border-black/25 text-black text-sm">Event Calendar <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            <a href="#pelayanan" class="px-4 py-2.5 bg-black text-white text-sm">Pelayanan Gereja <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            <a href="#event" class="px-4 py-2.5 border border-black/25 text-black text-sm">Kalender Acara <i class="fa-solid fa-arrow-right ml-1"></i></a>
           </div>
         </div>
         <div class="relative">
-          <img src="./images/image-7.png" alt="Congregation praying together" class="w-full h-[380px] object-cover shadow-2xl">
-          <div class="absolute -bottom-4 -left-4 bg-black text-white px-4 py-2 text-xs font-mono tracking-widest uppercase">The Year To Arise and Shine</div>
+          <img src="./images/image-7.png" alt="Jemaat berdoa bersama" class="w-full h-[380px] object-cover shadow-2xl">
+          <div class="absolute -bottom-4 -left-4 bg-black text-white px-4 py-2 text-xs font-mono tracking-widest uppercase">Tahun Untuk Bangkit dan Bersinar</div>
         </div>
       </div>
     </section>
@@ -230,35 +306,35 @@
     <section id="pelayanan" class="bg-coal py-20">
       <div class="max-w-6xl mx-auto px-6">
         <div class="bg-white text-black p-8 md:p-10 shadow-2xl">
-          <h2 class="font-heading text-2xl md:text-3xl uppercase">Midweek Worship</h2>
+          <h2 class="font-heading text-2xl md:text-3xl uppercase">Ibadah Tengah Minggu</h2>
           <p class="mt-2 font-semibold uppercase">GBI My Home Rawasari - Rayon 20</p>
 
           <div class="mt-8 grid md:grid-cols-3 gap-8 text-sm leading-relaxed">
             <div>
-              <h3 class="font-heading text-lg uppercase mb-3">Breakthrough Prayer</h3>
-              <p>Every Tuesday</p>
+              <h3 class="font-heading text-lg uppercase mb-3">Doa Terobosan</h3>
+              <p>Setiap Selasa</p>
               <p class="mt-1">19.00 WIB (Onsite)</p>
-              <p class="mt-1">at GBI My Home Rawasari</p>
-              <p class="mt-1">2nd Floor</p>
+              <p class="mt-1">di GBI My Home Rawasari</p>
+              <p class="mt-1">Lantai 2</p>
             </div>
             <div>
-              <h3 class="font-heading text-lg uppercase mb-3">Online Fasting Prayer</h3>
-              <p>Every Friday</p>
+              <h3 class="font-heading text-lg uppercase mb-3">Doa Puasa Online</h3>
+              <p>Setiap Jumat</p>
               <p class="mt-1">05.00 WIB</p>
-              <p class="mt-1">(Via Zoom Meeting)</p>
+              <p class="mt-1">(Melalui Zoom Meeting)</p>
             </div>
             <div>
-              <h3 class="font-heading text-lg uppercase mb-3">Onsite Dawn Prayer</h3>
-              <p>Every Saturday</p>
+              <h3 class="font-heading text-lg uppercase mb-3">Doa Fajar Onsite</h3>
+              <p>Setiap Sabtu</p>
               <p class="mt-1">05.00 WIB</p>
-              <p class="mt-1">at GBI My Home Rawasari</p>
-              <p class="mt-1">2nd Floor</p>
+              <p class="mt-1">di GBI My Home Rawasari</p>
+              <p class="mt-1">Lantai 2</p>
             </div>
           </div>
 
           <div class="mt-8">
             <a href="https://www.youtube.com/c/GBIMYHOME" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-black text-white text-sm px-5 py-3 hover:bg-black/85 transition">
-              Our Youtube Channel <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+              Kanal YouTube Kami <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
             </a>
           </div>
         </div>
@@ -268,20 +344,20 @@
     <section id="event" class="bg-[#ececec] py-20">
       <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8 items-center">
         <div class="bg-[#c8ccd0] p-8">
-          <h3 class="section-title-serif text-6xl leading-[0.9]">Holy<br>Week</h3>
+          <h3 class="section-title-serif text-6xl leading-[0.9]">Pekan<br>Suci</h3>
           <p class="mt-6 font-mono text-[11px] tracking-widest uppercase text-black/65">Tanjung Pinang · 2026</p>
-          <img src="./images/image-11.png" alt="Holy Week event" class="mt-6 w-full h-full object-cover">
+          <img src="./images/image-11.png" alt="Acara Pekan Suci" class="mt-6 w-full h-full object-cover">
         </div>
 
         <div>
-          <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Events</span>
-          <h3 class="font-body text-5xl mt-3">Holy Week</h3>
+          <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Acara</span>
+          <h3 class="font-body text-5xl mt-3">Pekan Suci</h3>
           <p class="text-black/70 mt-4 max-w-md leading-relaxed">
-            Join us for Palm Sunday, Maundy Thursday, Good Friday, and Easter services with the GBI My Home Rayon 20 family.
+            Bergabunglah dalam rangkaian ibadah Minggu Palma, Kamis Putih, Jumat Agung, dan Paskah bersama keluarga GBI My Home Rayon 20.
           </p>
           <p class="mt-5 text-sm text-black/65">Mar 29, 2026 – Apr 5, 2026</p>
           <a href="#kontak" class="inline-block mt-6 bg-black text-white text-sm px-4 py-2.5 hover:bg-black/90 transition">
-            View Event <i class="fa-solid fa-arrow-right ml-1"></i>
+            Lihat Acara <i class="fa-solid fa-arrow-right ml-1"></i>
           </a>
         </div>
       </div>
@@ -289,9 +365,9 @@
 
     <section id="jadwal" class="bg-bone py-20">
       <div class="max-w-3xl mx-auto px-6 text-center">
-        <h2 class="section-title-serif text-5xl">Encounter Jesus</h2>
+        <h2 class="section-title-serif text-5xl">Bertemu Yesus</h2>
         <p class="mt-4 text-black/70 text-sm leading-relaxed max-w-xl mx-auto">
-          Do you know Jesus? We are ready to serve you through prayer, counseling, and pastoral care.
+          Sudahkah Anda mengenal Yesus? Kami siap melayani Anda melalui doa, konseling, dan pendampingan pastoral.
         </p>
 
         <div class="mt-10 text-left">
@@ -299,51 +375,87 @@
 
           <div x-data="{open:false}" class="py-4">
             <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
-              <span>Meet Jesus</span>
+              <span>Mengenal Yesus</span>
               <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
             </button>
-            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Foundational discipleship service to know Christ and grow in early faith.</p>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Pelayanan pemuridan dasar untuk mengenal Kristus dan bertumbuh dalam iman mula-mula.</p>
             <div class="line-divider mt-4"></div>
           </div>
 
           <div x-data="{open:false}" class="py-4">
             <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
-              <span>Receive Prophetic Prayer</span>
+              <span>Menerima Doa Profetik</span>
               <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
             </button>
-            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Personal prayer support for struggles, family needs, and life decisions.</p>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Pendampingan doa pribadi untuk pergumulan, kebutuhan keluarga, dan keputusan hidup.</p>
             <div class="line-divider mt-4"></div>
           </div>
 
           <div x-data="{open:false}" class="py-4">
             <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
-              <span>Receive Prayer for Healing</span>
+              <span>Menerima Doa Kesembuhan</span>
               <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
             </button>
-            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Healing prayer ministry for physical, emotional, and inner restoration needs.</p>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Pelayanan doa kesembuhan untuk kebutuhan pemulihan fisik, emosional, dan batin.</p>
             <div class="line-divider mt-4"></div>
           </div>
 
           <div x-data="{open:false}" class="py-4">
             <button class="w-full flex items-center justify-between text-sm" @click="open=!open">
-              <span>Receive Inner Healing & Counseling</span>
+              <span>Menerima Pemulihan Batin & Konseling</span>
               <i class="fa-solid" :class="open ? 'fa-minus' : 'fa-plus'"></i>
             </button>
-            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Pastoral support for inner healing and family counseling.</p>
+            <p x-show="open" x-transition class="text-sm text-black/65 mt-3 pr-7">Pendampingan pastoral untuk pemulihan batin dan konseling keluarga.</p>
             <div class="line-divider mt-4"></div>
           </div>
         </div>
       </div>
     </section>
 
+    <section class="bg-paper py-20 border-t border-black/10">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div>
+            <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Video Terbaru</span>
+            <h3 class="font-body text-4xl mt-2">Video Terbaru dari Channel Youtube</h3>
+          </div>
+          <a href="https://www.youtube.com/@r20.gbimyhomeofficial/videos" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold underline">
+            Lihat Selengkapnya <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </a>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-black p-2">
+            <div class="aspect-video">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/bkSSS-K7paI" title="Video GBI 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="bg-black p-2">
+            <div class="aspect-video">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/_wM9OtQkyM8" title="Video GBI 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="bg-black p-2">
+            <div class="aspect-video">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/GhG5RWcFqss" title="Video GBI 3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="bg-black p-2">
+            <div class="aspect-video">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/k8eE47SGuj0" title="Video GBI 4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="relative min-h-[540px]">
-      <img src="./images/image-9.png" alt="Church music community gathering" class="absolute inset-0 w-full h-full object-cover">
+      <img src="./images/image-9.png" alt="Komunitas musik gereja" class="absolute inset-0 w-full h-full object-cover">
       <div class="absolute inset-0 bg-black/45"></div>
       <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 h-full flex flex-col justify-end">
-        <span class="font-mono text-[11px] tracking-widest uppercase text-white/75">Bethel Music Style Section</span>
-        <h3 class="mt-5 text-white font-body text-5xl max-w-2xl">New Album: We Must Respond</h3>
+        <span class="font-mono text-[11px] tracking-widest uppercase text-white/75">Bagian Musik Bethel</span>
+        <h3 class="mt-5 text-white font-body text-5xl max-w-2xl">Album Baru: Kita Harus Merespons</h3>
         <a href="#kontak" class="inline-flex items-center gap-2 mt-7 text-white text-sm border-b border-white/70 w-fit pb-1">
-          Listen Now <i class="fa-solid fa-arrow-right text-xs"></i>
+          Dengarkan Sekarang <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
     </section>
@@ -351,49 +463,49 @@
     <section class="bg-black py-20">
       <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <span class="font-mono text-[11px] tracking-widest uppercase text-white/60">Schools</span>
-          <h3 class="text-white font-body text-5xl mt-3 leading-tight">Resourcing Every Generation for Revival</h3>
-          <p class="text-white/65 mt-5 text-sm max-w-md">Equipping through Bible school, leadership training, and intergenerational ministry.</p>
-          <a href="#kontak" class="inline-block mt-7 bg-white text-black text-sm px-4 py-2.5 hover:bg-white/90 transition">View Schools <i class="fa-solid fa-arrow-right ml-1"></i></a>
+          <span class="font-mono text-[11px] tracking-widest uppercase text-white/60">Sekolah</span>
+          <h3 class="text-white font-body text-5xl mt-3 leading-tight">Memperlengkapi Setiap Generasi untuk Kebangunan</h3>
+          <p class="text-white/65 mt-5 text-sm max-w-md">Pembinaan melalui sekolah Alkitab, pelatihan kepemimpinan, dan pelayanan lintas generasi.</p>
+          <a href="#kontak" class="inline-block mt-7 bg-white text-black text-sm px-4 py-2.5 hover:bg-white/90 transition">Lihat Sekolah <i class="fa-solid fa-arrow-right ml-1"></i></a>
         </div>
-        <img src="./images/image-8.png" alt="Church ministry school" class="w-full h-[360px] object-cover">
+        <img src="./images/image-8.png" alt="Sekolah pelayanan gereja" class="w-full h-[360px] object-cover">
       </div>
     </section>
 
     <section class="bg-paper py-20">
       <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Future Campus</span>
-          <h3 class="font-body text-5xl mt-3">arise & build</h3>
-          <p class="text-black/65 mt-5 text-sm max-w-md">We are preparing expanded ministry facilities to reach and equip more people.</p>
-          <a href="#kontak" class="inline-block mt-7 bg-black text-white text-sm px-4 py-2.5 hover:bg-black/90 transition">Learn More <i class="fa-solid fa-arrow-right ml-1"></i></a>
+          <span class="font-mono text-[11px] tracking-widest uppercase text-black/50">Kampus Masa Depan</span>
+          <h3 class="font-body text-5xl mt-3">bangkit & membangun</h3>
+          <p class="text-black/65 mt-5 text-sm max-w-md">Kami menyiapkan pengembangan fasilitas pelayanan untuk menjangkau dan memperlengkapi lebih banyak orang.</p>
+          <a href="#kontak" class="inline-block mt-7 bg-black text-white text-sm px-4 py-2.5 hover:bg-black/90 transition">Pelajari Selengkapnya <i class="fa-solid fa-arrow-right ml-1"></i></a>
         </div>
-        <img src="./images/image-10.png" alt="Future church campus plan" class="w-full h-[330px] object-cover">
+        <img src="./images/image-10.png" alt="Rencana kampus gereja masa depan" class="w-full h-[330px] object-cover">
       </div>
     </section>
 
     <section id="kontak" class="bg-[#17191d] py-20 border-t border-white/10">
       <div class="max-w-6xl mx-auto px-6">
-        <span class="font-mono text-[11px] tracking-widest uppercase text-white/50">Donation</span>
-        <h3 class="text-white text-5xl font-body mt-3">Give & Tithe Offering</h3>
+        <span class="font-mono text-[11px] tracking-widest uppercase text-white/50">Persembahan</span>
+        <h3 class="text-white text-5xl font-body mt-3">Persembahan & Persepuluhan</h3>
         <div class="mt-8 grid lg:grid-cols-2 gap-8">
           <div class="bg-white/95 text-black p-6 md:p-7">
-            <h4 class="font-heading text-2xl">Donation Form</h4>
-            <p class="text-sm text-black/65 mt-1">Use this form to choose the donation account and payment method.</p>
+            <h4 class="font-heading text-2xl">Form Persembahan</h4>
+            <p class="text-sm text-black/65 mt-1">Gunakan form ini untuk memilih rekening tujuan dan metode pembayaran.</p>
             <form class="mt-6 grid gap-3">
-              <input type="text" placeholder="Full Name" class="h-11 border border-black/15 px-3 text-sm outline-none">
-              <input type="number" placeholder="Amount (IDR)" class="h-11 border border-black/15 px-3 text-sm outline-none">
+              <input type="text" placeholder="Nama Lengkap" class="h-11 border border-black/15 px-3 text-sm outline-none">
+              <input type="number" placeholder="Nominal (IDR)" class="h-11 border border-black/15 px-3 text-sm outline-none">
               <select class="h-11 border border-black/15 px-3 text-sm outline-none bg-white">
-                <option>Offering</option>
-                <option>Tithe</option>
-                <option>Special Donation</option>
+                <option>Persembahan</option>
+                <option>Persepuluhan</option>
+                <option>Donasi Khusus</option>
               </select>
               <select class="h-11 border border-black/15 px-3 text-sm outline-none bg-white">
                 <option>CIMB NIAGA - 8000 9403 9900</option>
                 <option>BCA - 380 146 7111</option>
-                <option>QRIS (Example)</option>
+                <option>QRIS (Contoh)</option>
               </select>
-              <button type="submit" class="h-11 bg-black text-white text-sm font-semibold hover:bg-black/80 transition">Submit Donation Info</button>
+              <button type="submit" class="h-11 bg-black text-white text-sm font-semibold hover:bg-black/80 transition">Kirim Informasi Persembahan</button>
             </form>
           </div>
 
@@ -408,23 +520,36 @@
             </div>
 
             <div class="mt-6 pt-5 border-t border-black/15">
-              <h5 class="font-heading text-lg">How to Pay via Bank Transfer</h5>
+              <h5 class="font-heading text-lg">Cara Bayar via Transfer Bank</h5>
               <ol class="mt-2 list-decimal pl-5 text-sm space-y-1 text-black/80">
-                <li>Select the destination account from the form.</li>
-                <li>Transfer according to your selected donation category.</li>
-                <li>Save transfer proof for confirmation.</li>
+                <li>Pilih rekening tujuan pada form.</li>
+                <li>Transfer sesuai kategori persembahan yang dipilih.</li>
+                <li>Simpan bukti transfer untuk konfirmasi.</li>
               </ol>
             </div>
 
             <div class="mt-6 pt-5 border-t border-black/15">
-              <h5 class="font-heading text-lg">QRIS (Example)</h5>
+              <h5 class="font-heading text-lg">QRIS (Contoh)</h5>
               <div class="mt-3 h-40 border-2 border-dashed border-black/30 flex flex-col items-center justify-center text-center px-4">
                 <i class="fa-solid fa-qrcode text-4xl text-black/60"></i>
-                <p class="text-xs text-black/65 mt-2">Scan this QRIS code example to complete your donation.</p>
+                <p class="text-xs text-black/65 mt-2">Pindai contoh kode QRIS ini untuk menyelesaikan persembahan.</p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section id="branches" class="bg-[#0f1115] py-20 border-t border-white/10">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-8">
+          <span class="font-mono text-[11px] tracking-widest uppercase text-white/50">Distribusi Cabang</span>
+          <h3 class="text-white text-4xl font-body mt-3">Peta Penyebaran Cabang Gereja GBI di Indonesia</h3>
+          <p class="text-white/70 mt-4 max-w-3xl text-sm leading-relaxed">
+            Peta menggunakan OpenStreetMap dan Leaflet.js. Klik marker untuk melihat profil singkat setiap gereja dan buka halaman detail.
+          </p>
+        </div>
+        <div id="branches-map" class="rounded-sm overflow-hidden"></div>
       </div>
     </section>
   </main>
@@ -432,51 +557,225 @@
   <footer class="bg-black text-white/70 border-t border-white/10">
     <div class="max-w-6xl mx-auto px-6 py-16 grid sm:grid-cols-2 lg:grid-cols-5 gap-10 text-sm">
       <div>
-        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">About</h4>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Tentang</h4>
         <p class="leading-relaxed text-white/55">
-          Bethel-style ministry website for GBI My Home Rayon 20, focused on faith growth and community service.
+          Website pelayanan bergaya Bethel untuk GBI My Home Rayon 20, berfokus pada pertumbuhan iman dan pelayanan komunitas.
         </p>
       </div>
       <div>
-        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Connect</h4>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Koneksi</h4>
         <ul class="space-y-2 text-white/60">
-          <li><a href="#beranda" class="hover:text-white">Home</a></li>
-          <li><a href="#event" class="hover:text-white">Calendar</a></li>
-          <li><a href="#jadwal" class="hover:text-white">Schedule</a></li>
-          <li><a href="#kontak" class="hover:text-white">Contact Us</a></li>
+          <li><a href="#beranda" class="hover:text-white">Beranda</a></li>
+          <li><a href="#event" class="hover:text-white">Kalender</a></li>
+          <li><a href="#jadwal" class="hover:text-white">Jadwal</a></li>
+          <li><a href="#kontak" class="hover:text-white">Hubungi Kami</a></li>
         </ul>
       </div>
       <div>
-        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Resources</h4>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Sumber Daya</h4>
         <ul class="space-y-2 text-white/60">
-          <li><a href="#pelayanan" class="hover:text-white">Church Online</a></li>
-          <li><a href="#pelayanan" class="hover:text-white">Counseling</a></li>
+          <li><a href="#pelayanan" class="hover:text-white">Gereja Online</a></li>
+          <li><a href="#pelayanan" class="hover:text-white">Konseling</a></li>
           <li><a href="#event" class="hover:text-white">Podcast</a></li>
-          <li><a href="#event" class="hover:text-white">Store</a></li>
         </ul>
       </div>
       <div>
-        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">More</h4>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Lainnya</h4>
         <ul class="space-y-2 text-white/60">
-          <li><a href="#profil" class="hover:text-white">Vision</a></li>
-          <li><a href="#pelayanan" class="hover:text-white">Privacy</a></li>
-          <li><a href="#kontak" class="hover:text-white">Terms</a></li>
-          <li><a href="#kontak" class="hover:text-white">Giving</a></li>
+          <li><a href="#profil" class="hover:text-white">Visi</a></li>
+          <li><a href="#pelayanan" class="hover:text-white">Privasi</a></li>
+          <li><a href="#kontak" class="hover:text-white">Ketentuan</a></li>
+          <li><a href="#kontak" class="hover:text-white">Persembahan</a></li>
         </ul>
       </div>
       <div>
-        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Social</h4>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Media Sosial</h4>
         <div class="space-y-2 text-white/60">
           <a href="https://facebook.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-facebook-f w-5"></i> Facebook</a>
           <a href="https://instagram.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-instagram w-5"></i> Instagram</a>
           <a href="https://youtube.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-youtube w-5"></i> YouTube</a>
-          <a href="https://spotify.com" target="_blank" class="block hover:text-white"><i class="fa-brands fa-spotify w-5"></i> Spotify</a>
         </div>
       </div>
     </div>
-    <div class="border-t border-white/10 py-5 text-center text-xs text-white/35">
-      © 2026 GBI My Home Rayon 20. All rights reserved.
+    <div class="border-t border-white/10 py-5">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
+        <p class="text-white/35">© 2026 GBI My Home Rayon 20. All rights reserved.</p>
+        <p class="text-white/50">
+          Powered by <a href="https://bahtraku.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">Bahtraku.org</a> |
+          <a href="admin-login.html" class="underline hover:text-white">Login Admin</a>
+        </p>
+      </div>
     </div>
   </footer>
+  <button id="backToTopIndex" type="button" class="fixed bottom-6 right-6 z-[90] h-11 w-11 rounded-full bg-white text-black shadow-lg border border-black/15 hidden" aria-label="Kembali ke atas">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+  <div id="disclaimerModalIndex" class="fixed inset-0 z-[120] hidden">
+    <div class="absolute inset-0 bg-black/75"></div>
+    <div class="relative min-h-full flex items-center justify-center p-6">
+      <div class="w-full max-w-xl bg-white text-black p-6 md:p-7">
+        <h3 class="font-heading text-2xl">Disclaimer</h3>
+        <p class="mt-4 text-sm leading-relaxed">
+          Ini merupakan tampilan usulan dari hasil ideasi dan Analisa awal, konten di ambil dari website lama, internet, youtube terkait dan juga dibuat dengan bantuan AI pihak Ketika,
+        </p>
+        <p class="mt-4 text-sm leading-relaxed">author Bahtraku.org</p>
+        <p class="mt-1 text-sm leading-relaxed">PIC: 082199558191 (JF)</p>
+        <button id="closeDisclaimerIndex" type="button" class="mt-6 h-10 px-5 bg-black text-white text-sm font-semibold">Saya Mengerti</button>
+      </div>
+    </div>
+  </div>
+  <div id="google_translate_element" class="hidden"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'id',
+        autoDisplay: false
+      }, 'google_translate_element');
+
+      const switcher = document.getElementById('languageSwitcher');
+      if (!switcher) return;
+
+      const currentCookie = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('googtrans='));
+      const currentLang = currentCookie ? currentCookie.split('/').pop() : 'id';
+      switcher.value = currentLang || 'id';
+
+      switcher.addEventListener('change', (event) => {
+        const selectedLang = event.target.value;
+        document.cookie = `googtrans=/id/${selectedLang}; path=/`;
+        document.cookie = `googtrans=/id/${selectedLang}; path=/; domain=${location.hostname}`;
+        window.location.reload();
+      });
+    }
+
+    (async function initBranchesMap() {
+      const megaMenuContainer = document.getElementById('branchesMegaMenuContentIndex');
+      const mapContainer = document.getElementById('branches-map');
+      if (!mapContainer || !window.L) return;
+      const map = L.map('branches-map', {
+        center: [-2.5, 118],
+        zoom: 5,
+        minZoom: 4
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      try {
+        const response = await fetch('./data/gereja.json');
+        const churches = await response.json();
+        const bounds = [];
+        renderBranchesMegaMenuIndex(churches, megaMenuContainer);
+
+        churches.forEach((church) => {
+          const coordinate = [church.latitude, church.longitude];
+          bounds.push(coordinate);
+
+          const marker = L.marker(coordinate).addTo(map);
+          marker.bindTooltip(church.name, {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -20],
+            className: 'marker-label'
+          });
+
+          marker.bindPopup(`
+            <div>
+              <img src="${church.image}" alt="${church.name}" style="width:100%;height:120px;object-fit:cover;border-radius:6px;">
+              <h4 style="font-weight:700;font-size:16px;margin:10px 0 6px 0;">${church.name}</h4>
+              <p style="font-size:12px;color:#4b5563;margin:0 0 8px 0;">${church.city} · ${church.address}</p>
+              <p style="font-size:12px;line-height:1.45;color:#1f2937;margin:0 0 10px 0;">${church.shortProfile}</p>
+              <a href="gereja-detail.html?id=${church.id}" style="font-size:12px;font-weight:600;color:#0f172a;text-decoration:underline;">Lihat detail profil</a>
+            </div>
+          `);
+        });
+
+        if (bounds.length > 0) {
+          map.fitBounds(bounds, { padding: [28, 28] });
+        }
+      } catch (error) {
+        if (megaMenuContainer) {
+          megaMenuContainer.innerHTML = '<p class="text-black/60">Data cabang gagal dimuat.</p>';
+        }
+        mapContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ffffffb3;font-size:14px;padding:16px;text-align:center;">Data gereja gagal dimuat. Pastikan aplikasi dijalankan melalui web server lokal.</div>';
+      }
+    })();
+
+    function getProvinceFromCityIndex(city) {
+      const provinceMap = {
+        'Jakarta': 'DKI Jakarta',
+        'Jakarta Utara': 'DKI Jakarta',
+        'Bandung': 'Jawa Barat',
+        'Semarang': 'Jawa Tengah',
+        'Surabaya': 'Jawa Timur',
+        'Yogyakarta': 'DI Yogyakarta',
+        'Medan': 'Sumatera Utara',
+        'Makassar': 'Sulawesi Selatan',
+        'Denpasar': 'Bali',
+        'Balikpapan': 'Kalimantan Timur'
+      };
+      return provinceMap[city] || 'Lainnya';
+    }
+
+    function renderBranchesMegaMenuIndex(churches, container) {
+      if (!container || !Array.isArray(churches)) return;
+      const grouped = {};
+
+      churches.forEach((church) => {
+        const province = getProvinceFromCityIndex(church.city);
+        if (!grouped[province]) grouped[province] = [];
+        grouped[province].push(church);
+      });
+
+      const sortedProvinces = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'id'));
+      container.innerHTML = sortedProvinces.map((province) => `
+        <div>
+          <h4 class="font-semibold text-xs uppercase tracking-wider text-black/60 mb-3">${province}</h4>
+          <div class="space-y-2">
+            ${grouped[province].map((church) => `
+              <a href="branches.html?id=${church.id}" class="block text-sm hover:text-black/70">${church.name}</a>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    (function initBackToTopIndex() {
+      const button = document.getElementById('backToTopIndex');
+      if (!button) return;
+
+      const toggleButton = () => {
+        if (window.scrollY > 280) {
+          button.classList.remove('hidden');
+        } else {
+          button.classList.add('hidden');
+        }
+      };
+
+      window.addEventListener('scroll', toggleButton);
+      toggleButton();
+
+      button.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+
+    (function initDisclaimerModalIndex() {
+      const modal = document.getElementById('disclaimerModalIndex');
+      const closeButton = document.getElementById('closeDisclaimerIndex');
+      if (!modal || !closeButton) return;
+
+      modal.classList.remove('hidden');
+
+      closeButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+    })();
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

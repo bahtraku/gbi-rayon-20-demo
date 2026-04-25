@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Cabang GBI</title>
+  <link rel="icon" type="image/png" href="images/logo-gbi.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            coal: '#0a0a0a',
+            paper: '#f2f2f0',
+            bone: '#dad7cb'
+          },
+          fontFamily: {
+            heading: ['Montserrat', 'Helvetica Neue', 'Arial', 'sans-serif'],
+            body: ['DM Sans', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', Arial, sans-serif; background: #0a0a0a; }
+    #branches-map-template {
+      width: 100%;
+      height: 520px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    #languageSwitcherBranches option {
+      color: #000;
+    }
+    #branchesTopbar {
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    #branchesTopbar.topbar-scrolled {
+      background: rgba(0, 0, 0, 0.96);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      transform: translateY(0);
+    }
+    .nav-animated-link {
+      position: relative;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .nav-animated-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.9);
+      transition: width 0.25s ease;
+    }
+    .nav-animated-link:hover::after,
+    .nav-animated-link.nav-link-selected::after {
+      width: 100%;
+    }
+    .nav-animated-link.nav-link-selected {
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .branches-mega-menu {
+      max-height: 64vh;
+      overflow: auto;
+    }
+    .goog-te-banner-frame.skiptranslate,
+    .goog-te-banner-frame,
+    iframe.goog-te-banner-frame {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+    }
+    body,
+    html {
+      top: 0 !important;
+      margin-top: 0 !important;
+    }
+    body > .skiptranslate,
+    .goog-te-spinner-pos,
+    #goog-gt-tt,
+    .goog-tooltip {
+      display: none !important;
+    }
+    .leaflet-top,
+    .leaflet-bottom,
+    .leaflet-pane,
+    .leaflet-control {
+      z-index: 20 !important;
+    }
+    .leaflet-popup-content {
+      margin: 12px;
+      min-width: 220px;
+    }
+    .marker-label {
+      background: rgba(17, 25, 40, 0.9);
+      border: none;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      box-shadow: none;
+    }
+    .marker-label::before { display: none; }
+  </style>
+</head>
+<body class="text-coal">
+  <header id="branchesTopbar" class="sticky top-0 z-[70] bg-black/90 border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-2 text-white">
+        <img src="images/logo-gbi.png" alt="Logo GBI" class="w-9 h-9 object-contain bg-white rounded-full p-1">
+        <span class="font-heading font-bold">Website Cabang GBI</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-white/85 text-sm">
+        <a href="#hero" class="nav-animated-link hover:text-white">Beranda</a>
+        <a href="#profil" class="nav-animated-link hover:text-white">Profil</a>
+        <a href="#jadwal" class="nav-animated-link hover:text-white">Jadwal Ibadah</a>
+        <a href="#donasi" class="nav-animated-link hover:text-white">Persembahan</a>
+        <div class="relative group">
+          <a href="#branches" class="nav-animated-link hover:text-white flex items-center gap-2">
+            Cabang
+            <span class="text-[10px]">▾</span>
+          </a>
+          <div class="absolute top-full right-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+            <div class="branches-mega-menu w-[860px] max-w-[85vw] bg-white text-black shadow-2xl border border-black/10 p-6">
+              <div id="branchesMegaMenuContent" class="grid grid-cols-3 gap-6 text-sm">
+                <p class="text-black/60">Memuat data cabang...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <label for="languageSwitcherBranches" class="sr-only">Terjemahkan</label>
+          <select id="languageSwitcherBranches" class="h-8 bg-transparent border border-white/30 text-white text-[11px] px-2 uppercase tracking-[0.1em] outline-none">
+            <option value="id">ID</option>
+            <option value="en">EN</option>
+          </select>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="relative min-h-[580px] flex items-center">
+      <img id="hero-image" src="images/image-8.png" alt="Hero Cabang" class="absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/60"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10 py-20 text-white">
+        <p class="text-white/80 text-base">Simulasi Website Cabang GBI</p>
+        <h1 id="hero-title" class="font-heading text-5xl md:text-6xl mt-3 leading-tight">Website Cabang</h1>
+        <p id="hero-subtitle" class="text-white/75 mt-4 max-w-2xl">Konten ini akan mengikuti data cabang dari JSON.</p>
+        <a href="index.html" class="inline-block mt-7 text-sm border-b border-white/70 pb-1 hover:text-white">← Kembali ke Situs Utama</a>
+      </div>
+    </section>
+
+
+    <section id="profil" class="bg-paper py-20">
+      <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="font-heading text-4xl leading-tight">Profil Singkat Cabang</h2>
+          <h3 id="profil-name" class="mt-4 text-2xl font-semibold"></h3>
+          <p id="profil-city" class="mt-2 text-black/70"></p>
+          <p id="profil-address" class="mt-1 text-black/70"></p>
+          <p id="profil-text" class="mt-5 text-black/70 leading-relaxed"></p>
+        </div>
+        <img id="profil-image" src="images/image-7.png" alt="Profil Cabang" class="w-full h-[360px] object-cover">
+      </div>
+    </section>
+
+    <section id="jadwal" class="bg-bone py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="font-heading text-4xl mb-8">Jadwal Ibadah</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="border border-black/15 p-6 bg-white/40">
+            <h3 class="font-heading text-2xl">Ibadah Utama</h3>
+            <p class="mt-3 text-black/75">Minggu • 08.00 WIB</p>
+            <p class="text-black/75">Minggu • 11.00 WIB</p>
+            <p id="schedule-branch" class="text-black/65 mt-3"></p>
+          </div>
+          <div class="border border-black/15 p-6 bg-white/40">
+            <h3 class="font-heading text-2xl">Ibadah Pemuda</h3>
+            <p class="mt-3 text-black/75">Sabtu • 16.00 WIB</p>
+            <p class="text-black/75">Tatap Muka di Aula Utama</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="donasi" class="bg-[#17191d] py-20 border-t border-white/10">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-white text-4xl font-heading">Persembahan</h2>
+        <p id="donation-branch" class="text-white/70 mt-3"></p>
+        <div class="mt-8 grid lg:grid-cols-2 gap-8">
+          <div class="bg-white p-6 md:p-7">
+            <h3 class="font-heading text-2xl">Form Persembahan</h3>
+            <form class="mt-5 grid gap-3">
+              <input type="text" placeholder="Nama Lengkap" class="h-11 border border-black/15 px-3 text-sm outline-none">
+              <input type="number" placeholder="Nominal (IDR)" class="h-11 border border-black/15 px-3 text-sm outline-none">
+              <select class="h-11 border border-black/15 px-3 text-sm outline-none bg-white">
+                <option>Persembahan</option>
+                <option>Persepuluhan</option>
+                <option>Donasi Khusus</option>
+              </select>
+              <button type="submit" class="h-11 bg-black text-white text-sm font-semibold">Kirim</button>
+            </form>
+          </div>
+          <div class="bg-white p-6 md:p-7">
+            <h3 class="font-heading text-2xl">Info Rekening</h3>
+            <div class="mt-4 space-y-3 text-sm leading-relaxed">
+              <p><span class="font-semibold">CIMB NIAGA</span><br>8000 9403 9900</p>
+              <p><span class="font-semibold">BCA</span><br>380 146 7111</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0b0d11] py-20 border-t border-white/10">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <img src="images/image-7.png" alt="Galeri Cabang 1" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-8.png" alt="Galeri Cabang 2" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-9.png" alt="Galeri Cabang 3" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-10.png" alt="Galeri Cabang 4" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-11.png" alt="Galeri Cabang 5" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-7.png" alt="Galeri Cabang 6" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-8.png" alt="Galeri Cabang 7" class="w-full h-44 md:h-48 object-cover">
+          <img src="images/image-9.png" alt="Galeri Cabang 8" class="w-full h-44 md:h-48 object-cover">
+        </div>
+      </div>
+    </section>
+
+    <section id="branches" class="bg-[#0f1115] py-20 border-t border-white/10 relative z-0">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-8">
+          <h2 class="text-white text-4xl font-heading">Distribusi Cabang</h2>
+          <p class="text-white/70 mt-3 text-sm">Sama seperti website utama, peta ini memakai OpenStreetMap dan Leaflet.js dengan data JSON cabang.</p>
+        </div>
+        <div id="branches-map-template" class="rounded-sm overflow-hidden"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-black text-white/70 border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-16 grid sm:grid-cols-2 lg:grid-cols-5 gap-10 text-sm">
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Tentang</h4>
+        <p class="leading-relaxed text-white/55">
+          Website pelayanan bergaya Bethel untuk GBI My Home Rayon 20, berfokus pada pertumbuhan iman dan pelayanan komunitas.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Koneksi</h4>
+        <ul class="space-y-2 text-white/60">
+          <li><a href="#hero" class="hover:text-white">Beranda</a></li>
+          <li><a href="#jadwal" class="hover:text-white">Jadwal</a></li>
+          <li><a href="#branches" class="hover:text-white">Cabang</a></li>
+          <li><a href="#donasi" class="hover:text-white">Persembahan</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Sumber Daya</h4>
+        <ul class="space-y-2 text-white/60">
+          <li><a href="index.html" class="hover:text-white">Website Utama</a></li>
+          <li><a href="gereja-detail.html" class="hover:text-white">Detail Gereja</a></li>
+          <li><a href="#profil" class="hover:text-white">Profil Cabang</a></li>
+          <li><a href="#branches" class="hover:text-white">Peta Cabang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Lainnya</h4>
+        <ul class="space-y-2 text-white/60">
+          <li><a href="#profil" class="hover:text-white">Visi</a></li>
+          <li><a href="#jadwal" class="hover:text-white">Ibadah</a></li>
+          <li><a href="#donasi" class="hover:text-white">Donasi</a></li>
+          <li><a href="#branches" class="hover:text-white">Distribusi Cabang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] tracking-widest uppercase text-white mb-4">Media Sosial</h4>
+        <div class="space-y-2 text-white/60">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="block hover:text-white">Facebook</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="block hover:text-white">Instagram</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="block hover:text-white">YouTube</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-5">
+      <div class="max-w-6xl mx-auto px-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
+        <p class="text-white/35">© 2026 GBI My Home Rayon 20. All rights reserved.</p>
+        <p class="text-white/50">
+          Powered by <a href="https://bahtraku.org/" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">Bahtraku.org</a> |
+          <a href="admin-login.html" class="underline hover:text-white">Login Admin</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <button id="backToTopBranches" type="button" class="fixed bottom-6 right-6 z-[90] h-11 w-11 rounded-full bg-white text-black shadow-lg border border-black/15 hidden" aria-label="Kembali ke atas">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+  <div id="disclaimerModalBranches" class="fixed inset-0 z-[120] hidden">
+    <div class="absolute inset-0 bg-black/75"></div>
+    <div class="relative min-h-full flex items-center justify-center p-6">
+      <div class="w-full max-w-xl bg-white text-black p-6 md:p-7">
+        <h3 class="font-heading text-2xl">Disclaimer</h3>
+        <p class="mt-4 text-sm leading-relaxed">
+          Ini merupakan tampilan usulan dari hasil ideasi dan Analisa awal, konten di ambil dari website lama, internet, youtube terkait dan juga dibuat dengan bantuan AI pihak Ketika,
+        </p>
+        <p class="mt-4 text-sm leading-relaxed">author Bahtraku.org</p>
+        <p class="mt-1 text-sm leading-relaxed">PIC: 082199558191 (JF)</p>
+        <button id="closeDisclaimerBranches" type="button" class="mt-6 h-10 px-5 bg-black text-white text-sm font-semibold">Saya Mengerti</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="google_translate_element_branches" class="hidden"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    (function initBranchesNavAnimation() {
+      const navLinks = document.querySelectorAll('.nav-animated-link[href^="#"]');
+      navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          navLinks.forEach((item) => item.classList.remove('nav-link-selected'));
+          link.classList.add('nav-link-selected');
+        });
+      });
+    })();
+    function googleTranslateElementInitBranches() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'id',
+        autoDisplay: false
+      }, 'google_translate_element_branches');
+
+      const switcher = document.getElementById('languageSwitcherBranches');
+      if (!switcher) return;
+
+      const currentCookie = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('googtrans='));
+      const currentLang = currentCookie ? currentCookie.split('/').pop() : 'id';
+      switcher.value = currentLang || 'id';
+
+      switcher.addEventListener('change', (event) => {
+        const selectedLang = event.target.value;
+        document.cookie = `googtrans=/id/${selectedLang}; path=/`;
+        document.cookie = `googtrans=/id/${selectedLang}; path=/; domain=${location.hostname}`;
+        window.location.reload();
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const topbar = document.getElementById('branchesTopbar');
+      if (!topbar) return;
+      if (window.scrollY > 24) {
+        topbar.classList.add('topbar-scrolled');
+      } else {
+        topbar.classList.remove('topbar-scrolled');
+      }
+    });
+
+    (async function initBranchTemplate() {
+      const megaMenuContainer = document.getElementById('branchesMegaMenuContent');
+      const params = new URLSearchParams(window.location.search);
+      const selectedBranchId = params.get('id');
+
+      try {
+        const response = await fetch('./data/gereja.json');
+        const churches = await response.json();
+        if (!Array.isArray(churches) || churches.length === 0) return;
+
+        const activeBranch = churches.find((item) => item.id === selectedBranchId) || churches[0];
+
+        document.getElementById('hero-title').textContent = activeBranch.name;
+        document.getElementById('hero-subtitle').textContent = `${activeBranch.city} • ${activeBranch.address}`;
+        document.getElementById('hero-image').src = activeBranch.image;
+        document.getElementById('profil-name').textContent = activeBranch.name;
+        document.getElementById('profil-city').textContent = `Kota: ${activeBranch.city}`;
+        document.getElementById('profil-address').textContent = `Alamat: ${activeBranch.address}`;
+        document.getElementById('profil-text').textContent = activeBranch.shortProfile;
+        document.getElementById('profil-image').src = activeBranch.image;
+        document.getElementById('schedule-branch').textContent = `Cabang: ${activeBranch.name}`;
+        document.getElementById('donation-branch').textContent = `Persembahan untuk pelayanan ${activeBranch.name}`;
+        renderBranchesMegaMenu(churches, megaMenuContainer);
+
+        initBranchesMap(churches);
+      } catch (error) {
+        if (megaMenuContainer) {
+          megaMenuContainer.innerHTML = '<p class="text-black/60">Data cabang gagal dimuat.</p>';
+        }
+      }
+    })();
+
+    function getProvinceFromCity(city) {
+      const provinceMap = {
+        'Jakarta': 'DKI Jakarta',
+        'Jakarta Utara': 'DKI Jakarta',
+        'Bandung': 'Jawa Barat',
+        'Semarang': 'Jawa Tengah',
+        'Surabaya': 'Jawa Timur',
+        'Yogyakarta': 'DI Yogyakarta',
+        'Medan': 'Sumatera Utara',
+        'Makassar': 'Sulawesi Selatan',
+        'Denpasar': 'Bali',
+        'Balikpapan': 'Kalimantan Timur'
+      };
+      return provinceMap[city] || 'Lainnya';
+    }
+
+    function renderBranchesMegaMenu(churches, container) {
+      if (!container) return;
+      const grouped = {};
+
+      churches.forEach((church) => {
+        const province = getProvinceFromCity(church.city);
+        if (!grouped[province]) grouped[province] = [];
+        grouped[province].push(church);
+      });
+
+      const sortedProvinces = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'id'));
+      container.innerHTML = sortedProvinces.map((province) => `
+        <div>
+          <h4 class="font-semibold text-xs uppercase tracking-wider text-black/60 mb-3">${province}</h4>
+          <div class="space-y-2">
+            ${grouped[province].map((church) => `
+              <a href="branches.html?id=${church.id}" class="block text-sm hover:text-black/70">${church.name}</a>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function initBranchesMap(churches) {
+      const mapContainer = document.getElementById('branches-map-template');
+      if (!mapContainer || !window.L) return;
+
+      const map = L.map('branches-map-template', {
+        center: [-2.5, 118],
+        zoom: 5,
+        minZoom: 4
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      const bounds = [];
+      churches.forEach((church) => {
+        const coordinate = [church.latitude, church.longitude];
+        bounds.push(coordinate);
+
+        const marker = L.marker(coordinate).addTo(map);
+        marker.bindTooltip(church.name, {
+          permanent: true,
+          direction: 'top',
+          offset: [0, -20],
+          className: 'marker-label'
+        });
+
+        marker.bindPopup(`
+          <div>
+            <img src="${church.image}" alt="${church.name}" style="width:100%;height:120px;object-fit:cover;border-radius:6px;">
+            <h4 style="font-weight:700;font-size:16px;margin:10px 0 6px 0;">${church.name}</h4>
+            <p style="font-size:12px;color:#4b5563;margin:0 0 8px 0;">${church.city} · ${church.address}</p>
+            <p style="font-size:12px;line-height:1.45;color:#1f2937;margin:0 0 10px 0;">${church.shortProfile}</p>
+            <a href="gereja-detail.html?id=${church.id}" style="font-size:12px;font-weight:600;color:#0f172a;text-decoration:underline;">Lihat detail profil</a>
+          </div>
+        `);
+      });
+
+      if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [28, 28] });
+      }
+    }
+
+    (function initBackToTopBranches() {
+      const button = document.getElementById('backToTopBranches');
+      if (!button) return;
+
+      const toggleButton = () => {
+        if (window.scrollY > 280) {
+          button.classList.remove('hidden');
+        } else {
+          button.classList.add('hidden');
+        }
+      };
+
+      window.addEventListener('scroll', toggleButton);
+      toggleButton();
+
+      button.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+
+    (function initDisclaimerModalBranches() {
+      const modal = document.getElementById('disclaimerModalBranches');
+      const closeButton = document.getElementById('closeDisclaimerBranches');
+      if (!modal || !closeButton) return;
+
+      modal.classList.remove('hidden');
+
+      closeButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+    })();
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInitBranches"></script>
+</body>
+</html>

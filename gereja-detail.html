@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Profil Gereja GBI</title>
+  <link rel="icon" type="image/png" href="images/logo-gbi.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen">
+  <main class="max-w-4xl mx-auto px-6 py-14">
+    <a href="index.html#branches" class="inline-flex items-center text-sm text-white/70 hover:text-white mb-8">← Kembali ke peta</a>
+
+    <section id="detail-card" class="hidden bg-[#15171d] border border-white/10 p-6 md:p-8">
+      <img id="church-image" src="" alt="Foto gereja" class="w-full h-[280px] object-cover">
+      <h1 id="church-name" class="text-3xl md:text-4xl font-semibold mt-6"></h1>
+      <p id="church-city" class="text-white/70 mt-2"></p>
+      <p id="church-address" class="text-white/80 mt-1"></p>
+      <p id="church-profile" class="text-white/85 mt-6 leading-relaxed"></p>
+      <div class="mt-8">
+        <a id="show-template-link" href="branches.html" class="inline-block bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90">Tampilkan Website</a>
+      </div>
+    </section>
+
+    <section id="detail-error" class="hidden bg-[#15171d] border border-red-400/20 p-6 md:p-8">
+      <h2 class="text-2xl font-semibold">Profil gereja tidak ditemukan</h2>
+      <p class="text-white/70 mt-2">Periksa kembali tautan detail atau buka dari popup marker pada peta Branches.</p>
+    </section>
+  </main>
+
+  <script>
+    (async function loadChurchDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const churchId = params.get('id');
+      const detailCard = document.getElementById('detail-card');
+      const detailError = document.getElementById('detail-error');
+
+      if (!churchId) {
+        detailError.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const response = await fetch('./data/gereja.json');
+        const churches = await response.json();
+        const church = churches.find((item) => item.id === churchId);
+
+        if (!church) {
+          detailError.classList.remove('hidden');
+          return;
+        }
+
+        document.getElementById('church-image').src = church.image;
+        document.getElementById('church-image').alt = church.name;
+        document.getElementById('church-name').textContent = church.name;
+        document.getElementById('church-city').textContent = `Kota: ${church.city}`;
+        document.getElementById('church-address').textContent = `Alamat: ${church.address}`;
+        document.getElementById('church-profile').textContent = church.shortProfile;
+        document.getElementById('show-template-link').href = `branches.html?id=${church.id}`;
+        detailCard.classList.remove('hidden');
+      } catch (error) {
+        detailError.classList.remove('hidden');
+      }
+    })();
+  </script>
+</body>
+</html>
